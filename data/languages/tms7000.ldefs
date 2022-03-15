@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- See Relax specification: Ghidra/Framework/SoftwareModeling/data/languages/language_definitions.rxg -->
+
+<language_definitions>
+   <language processor="TMS7000"
+            endian="big"
+            size="16"
+            variant="default"
+            version="1.0"
+            slafile="tms7000.sla"
+            processorspec="tms7000.pspec"
+            id="tms7000:BE:16:default">
+    <description>Texas Instruments TMS7000 Microcontroller Family</description>
+    <compiler name="default" spec="tms7000.cspec" id="default"/>
+  </language>
+</language_definitions>
