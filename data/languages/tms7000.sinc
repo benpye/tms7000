@@ -5,7 +5,7 @@ define space ram        type=ram_space      size=2  wordsize=1  default;
 define space register   type=register_space size=1;
 #define space HWSTACK type=ram_space size=1;
 
-define register offset=0x00 size=1 [ SP ];
+define register offset=0x00 size=2 [ SPX ];
 define register offset=0x10 size=2 [ PC ];
 define register offset=0x10 size=1 [ C N Z I ST3 ST2 ST1 ST0 ];
 
@@ -279,44 +279,25 @@ macro subtractionFlags(op1, op2, res) {
 }
 
 macro push8(val) {
-    SP = SP + 1;
-#    *:1 SP = val;
-    local ptr:2 = zext(SP);
-    *:1 ptr = val;
-#    *[HWSTACK]:1 SP = val;
+    SPX = SPX + 1;
+    *:1 SPX = val;
 }
 
 macro pop8(ret) {
-    local ptr:2 = zext(SP);
-    ret = *:1 ptr;
-#    ret = *[HWSTACK]:1 SP;
-#    ret = *:1 SP;
-    SP = SP - 1;
+    ret = *:1 SPX;
+    SPX = SPX - 1;
 }
 
 macro push16(val) {
-    local ptr:2 = zext(SP) + 1;
+    local ptr:2 = SPX + 1;
     *:2 ptr = val;
-#    *[HWSTACK]:1 (SP + 1) = val;
-#    *:1 (SP + 1) = val;
-    SP = SP + 2;
-#    local msb:1 = val(1);
-#    local lsb:1 = val:1;
-#    push8(msb);
-#    push8(lsb);
+    SPX = SPX + 2;
 }
 
 macro pop16(ret) {
-    local ptr:2 = zext(SP) - 1;
+    local ptr:2 = SPX - 1;
     ret = *:2 ptr;
-#    ret = *[HWSTACK]:1 (SP - 1);
-#    ret = *:1 (SP - 1);
-    SP = SP - 2;
-#    local msb:1;
-#    local lsb:1;
-#    pop8(lsb);
-#    pop8(msb);
-#    ret = (zext(msb) << 8) | zext(lsb);
+    SPX = SPX - 2;
 }
 
 macro mov16(src, dst) {
@@ -419,7 +400,7 @@ DST: rel is simm8 [ rel = inst_next + simm8; ] { export *:2 rel; }
 
 # STSP - Store Stack Pointer
 :STSP is op0_8=0x09 {
-    B = SP;
+    B = SPX:1;
 }
 
 # RETS - Return from Subroutine
@@ -452,7 +433,7 @@ DST: rel is simm8 [ rel = inst_next + simm8; ] { export *:2 rel; }
 
 # LDSP - Load Stack Pointer
 :LDSP is op0_8=0x0D {
-    SP = B;
+    SPX = zext(B);
 }
 
 # PUSH ST - Push on Stack (Status Register)
@@ -684,9 +665,12 @@ with : (op4_4>=0x8 & op4_4<=0xa) ... {
 :BR MEM is op0_8=0x8C ... & MEM {
     goto MEM;
 }
-:BR MEM is op0_8=0x9C ... & MEM {
-    local addr:2 = &MEM;
-    goto [addr];
+#:BR MEM is op0_8=0x9C ... & MEM {
+#    local addr:2 = &MEM;
+#    goto [addr];
+#} { export *:1 spair; }
+:BR "*"spair is op0_8=0x9C; spair {
+    goto [spair];
 }
 :BR MEM is op0_8=0xAC ... & MEM {
     local addr:2 = &MEM;

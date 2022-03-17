@@ -9,7 +9,7 @@
   <global>
     <range space="ram"/>
   </global>
-  <stackpointer register="SP" space="ram" growth="positive"/>
+  <stackpointer register="SPX" space="ram" growth="positive"/>
   <returnaddress>
     <varnode space="stack" offset="-1" size="2"/>
   </returnaddress>
@@ -29,11 +29,8 @@
         </pentry>
       </output>
       <unaffected>
-        <register name="SP"/>
+        <register name="SPX"/>
       </unaffected>
-      <localrange>
-        <range space="stack" first="0x1" last="0x7c"/>
-      </localrange>
     </prototype>
   </default_proto>
 </compiler_spec>
