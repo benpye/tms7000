@@ -3,21 +3,52 @@
 <!-- See Relax specification: Ghidra/Framework/SoftwareModeling/data/languages/processor_spec.rxg -->
 
 <processor_spec>
-  <programcounter register="PC"/>
 <!--      <register_data>
   <register name="AF_" group="Alt"/>
     <register name="BC_" group="Alt"/>
     <register name="DE_" group="Alt"/>
     <register name="HL_" group="Alt"/>
   </register_data> -->
-<!--  <default_symbols>
-    <symbol name="RST0" address="ram:0000" entry="true"/>
-    <symbol name="RST1" address="ram:0008" entry="false"/>
-    <symbol name="RST2" address="ram:0010" entry="false"/>
-    <symbol name="RST3" address="ram:0018" entry="false"/>
-    <symbol name="RST4" address="ram:0020" entry="false"/>
-    <symbol name="RST5" address="ram:0028" entry="false"/>
-    <symbol name="RST6" address="ram:0030" entry="false"/>
-    <symbol name="RST7" address="ram:0038" entry="false"/> 
-  </default_symbols> -->
+  
+  <programcounter register="PC" />
+  
+  <!-- <volatile outputop="io_write" inputop="io_read">
+    <range space="ram" first="0x100" last="0x1ff" />
+  </volatile> -->
+  
+  <default_symbols>
+    <!-- INT4 and INT5 only on some devices -->
+    <!-- <symbol name="VECTOR_INT5" address="FFF4" entry="true" type="code_ptr"/>
+    <symbol name="VECTOR_INT4" address="FFF6" entry="true" type="code_ptr"/> -->
+    
+    <symbol name="VECTOR_TRAP23" address="FFD0" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP22" address="FFD2" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP21" address="FFD4" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP20" address="FFD6" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP19" address="FFD8" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP18" address="FFDA" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP17" address="FFDC" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP16" address="FFDE" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP15" address="FFE0" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP14" address="FFE2" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP13" address="FFE4" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP12" address="FFE6" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP11" address="FFE8" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP10" address="FFEA" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP9"  address="FFEC" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP8"  address="FFEE" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP7"  address="FFF0" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP6"  address="FFF2" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP5"  address="FFF4" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_TRAP4"  address="FFF6" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_INT3"   address="FFF8" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_INT2"   address="FFFA" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_INT1"   address="FFFC" entry="true" type="code_ptr" />
+    <symbol name="VECTOR_RESET"  address="FFFE" entry="true" type="code_ptr" />
+  </default_symbols>
+  
+  <default_memory_blocks>
+    <memory_block name="REGISTER_FILE" start_address="0x0000" length="0x0100" initialized="false"/>
+    <memory_block name="PERIPHERAL_FILE" start_address="0x0100" length="0x0100" initialized="false"/>
+  </default_memory_blocks>
 </processor_spec>
